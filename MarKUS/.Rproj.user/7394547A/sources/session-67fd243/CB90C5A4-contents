@@ -1,0 +1,12 @@
+etGeneric("filter_shannon_values", function(obj)
+  standardGeneric("filter_shannon_values"))
+
+setMethod("filter_shannon_values",
+          signature("data.frame"), function(shannon_values, threshold = 0.5) {
+  if (is.null(names(shannon_values))) {
+    stop("`shannon_values` must be a named list")
+  }
+  lapply(shannon_values, function(vals) {
+    vals[vals > threshold]
+  })
+}
