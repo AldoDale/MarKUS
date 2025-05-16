@@ -7,6 +7,7 @@ MarKUS provides a fast and efficient workflow for the extraction, count, and fil
 ```r
 remotes::install_github("AldoDale/MarKUS", subdir = "MarKUS")
 ```
+---
 
 ## How to use
 
@@ -38,6 +39,7 @@ merged_files
 #>3     Malta_3    ./path/to/file/Malta_3.fastq
 
 ```
+---
 
 ### Produce and count k-mers
 
@@ -163,3 +165,9 @@ shannon$plots
   <img src="MarKUS/man/example_figures/portugal.png" width="400" />
   <img src="MarKUS/man/example_figures/spain.png" width="400" />
 </p>
+
+
+
+```r
+filtered_shannon <- filter_shannon_values(x,  threshold = 1.8)
+```
