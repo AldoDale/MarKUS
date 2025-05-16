@@ -24,12 +24,14 @@ merged_files <- merge_fastq(path = ".", pattern = "*.fastq.1.gz")
 #  - path = path to the directory containing the files
 
 #  - pattern = pattern to recognize the first (or forward) strand files
+```
+####Returns: a data.frame
+```r
 
-#Returns: a data.frame
 
 merged_files
 
-#>       sample                               merged_path
+#>       sample                     merged_path
 #>1     Malta_1    ./path/to/file/Malta_1.fastq
 #>2     Malta_2    ./path/to/file/Malta_2.fastq
 #>3     Malta_3    ./path/to/file/Malta_3.fastq
