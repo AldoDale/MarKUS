@@ -158,4 +158,8 @@ shannon$plots
  
 
 ```
-![Repeat‑finder workflow diagram](MarKUS/man/example_figures/malta.png) ![Repeat‑finder workflow diagram](MarKUS/man/example_figures/portugal.png) ![Repeat‑finder workflow diagram](MarKUS/man/example_figures/spain.png)
+<p align="center">
+  <img src="MarKUS/man/example_figures/malta.png" width="200" />
+  <img src="MarKUS/man/example_figures/portugal.png" width="200" />
+  <img src="MarKUS/man/example_figures/spain.png" width="200" />
+</p>
