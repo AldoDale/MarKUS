@@ -9,7 +9,7 @@ filter_ed(
   threshold = 3,
   method = "lv",
   chunk_size = 500,
-  BPPARAM = MulticoreParam()
+  BPPARAM = BiocParallel::MulticoreParam()
 )
 }
 \arguments{

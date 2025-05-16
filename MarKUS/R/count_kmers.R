@@ -33,13 +33,23 @@ setMethod("count_kmers",
               txt <- file.path(dir0, paste0(sample, '_kmer_counts_R.txt'))
               message('Counting k-mers for ', sample)
 
-              inner_cmd <- sprintf(
-                'jellyfish count -m %d -s 100M -t %d -C -o "%s" <(zcat "%s")',
-                kmer_size,
-                threads,
-                db,
-                merged
-              )
+              if (grepl("\\.gz$", merged)) {
+                inner_cmd <- sprintf(
+                  'jellyfish count -m %d -s 100M -t %d -C -o "%s" <(zcat "%s")',
+                  kmer_size,
+                  threads,
+                  db,
+                  merged
+                )
+              } else {
+                inner_cmd <- sprintf(
+                  'jellyfish count -m %d -s 100M -t %d -C -o "%s" "%s"',
+                  kmer_size,
+                  threads,
+                  db,
+                  merged
+                )
+              }
               cmd1 <- sprintf('bash -o pipefail -c %s', shQuote(inner_cmd))
               status1 <- system(cmd1)
               if (status1 != 0)
