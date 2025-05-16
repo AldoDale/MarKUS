@@ -1,13 +1,35 @@
 # MarKUS: Marker K-mers for Untargeted Sequencing
 
-**MyPackage** does foo and bar.
+MarKUS provides a fast and efficient workflow for the extraction, count, and filtering of k-mers from .fastq, .fasta, and .fastq.gz files.
 
 ## Installation
 
 ```r
-# install from CRAN
-install.packages("MyPackage")
-
 # or from GitHub
-remotes::install_github("you/MyPackage")
+remotes::install_github("AldoDale/MarKUS", subdir = "MarKUS")
+```
 
+## How to use
+
+### If the sequencing data is split in first and second strand (or forward and reverse strand), the files should be first merged
+
+```r
+
+merged_files <- merge_fastq(path = ".", pattern = "*.fastq.1.gz")
+
+```
+###arguments
+  -dsj
+  -dfsfd
+
+```r
+
+merged_files <- merge_fastq(path = ".", pattern = "*.fastq.1.gz")
+
+```
+
+
+```r
+
+
+```
