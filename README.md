@@ -151,11 +151,11 @@ shannon$values
 shannon$plots
 
 #>$Malta
-![Repeat‑finder workflow diagram](MarKUS/man/example_figures/malta.png)
+
 #>$Portugal
 
 #>$Spain
  
 
 ```
-![Repeat‑finder workflow diagram](MarKUS/man/example_figures/malta.png)
+![Repeat‑finder workflow diagram](MarKUS/man/example_figures/malta.png) ![Repeat‑finder workflow diagram](MarKUS/man/example_figures/portugal.png) ![Repeat‑finder workflow diagram](MarKUS/man/example_figures/spain.png)
