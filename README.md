@@ -215,7 +215,7 @@ filtered_shannon
 
 ### Filter k-mers based on the edit distance
 
-The sequences which were found to be unique might be biased by mutations and sequencing errors (substitution, addition, deletion, or frameshift). The function filter_ed() allows to detect possible biases by calculating the number of edits that have to be done on a string (in this case a sequence) to make it identical to another string, and filter them based on a threshold. The function is based on the package `[stringDist](https://cran.r-project.org/package=stringdist)` and uses its methods.
+The sequences which were found to be unique might be biased by mutations and sequencing errors (substitution, addition, deletion, or frameshift). The function filter_ed() allows to detect possible biases by calculating the number of edits that have to be done on a string (in this case a sequence) to make it identical to another string, and filter them based on a threshold. The function is based on the package `[stringdist](https://cran.r-project.org/package=stringdist)` and uses its methods.
 
 ```r
 
