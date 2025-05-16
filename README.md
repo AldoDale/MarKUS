@@ -8,10 +8,10 @@ MarKUS provides a fast and efficient workflow for the extraction, count, and fil
 remotes::install_github("AldoDale/MarKUS", subdir = "MarKUS")
 ```
 
-##How to use
+## How to use
 
 
-###Merge fastq files
+### Merge fastq files
 
 If the sequencing data is split in first and second strand (or forward and reverse strand), the files should be first merged
 
@@ -25,7 +25,7 @@ merged_files <- merge_fastq(path = ".", pattern = "*.fastq.1.gz")
 
 #  - pattern = pattern to recognize the first (or forward) strand files
 ```
-####Returns: a data.frame
+#### Returns: a data.frame
 ```r
 
 
@@ -38,7 +38,7 @@ merged_files
 
 ```
 
-###Produce and count k-mers
+### Produce and count k-mers
 
 To use this function, Jellyfish (https://github.com/gmarcais/Jellyfish) must be installed.
 
