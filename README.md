@@ -76,7 +76,7 @@ kmers
 ```
 ---
 
-###Extract group-exclusive k-mers
+### Extract group-exclusive k-mers
 
 This function is used to detect k-mers exclusive of one group of samples. A minimum prevalence value can be set.
 
