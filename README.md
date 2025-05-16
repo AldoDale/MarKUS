@@ -22,9 +22,9 @@ merge_fastq(path, pattern)
 
 #arguments
 
-#  - path = path to the directory containing the files
+#  - path = path to the directory containing the files.
 
-#  - pattern = pattern to recognize the first (or forward) strand files
+#  - pattern = pattern to recognize the first (or forward) strand files.
 ```
 
 #### Returns: a data.frame
@@ -54,11 +54,11 @@ count_kmers(x, kmer_size, threads)
 
 #  - x = data.frame with a "sample" column with sample names and a "merged_path" column
 #        with the path to the fastq files. If merge_fastq() was used, the output of the
-#        function can be used as input of count_kmers()
+#        function can be used as input of count_kmers().
          
-#  - kmer_size = the desired size of k-mers
+#  - kmer_size = the desired size of k-mers.
 
-#  - threads = the number of threads to use
+#  - threads = the number of threads to use.
 
 ```
 #### Returns: a data.frame
@@ -87,13 +87,13 @@ get_shared_kmers(x, data, group, min_occurrence)
 #arguments
 
 #  - x = data.frame with a "sample" column with sample names and a "kmer_txt" column
-#        with the path to the k-mers .txt files. The dataframe is created by the function           count_kmers()
+#        with the path to the k-mers .txt files. The dataframe is created by the function count_kmers().
          
-#  - data = a data.frame with the metadata. It must have a "sample" column (identical to            the x data.frame column).
+#  - data = a data.frame with the metadata. It must have a "sample" column (identical to the x data.frame column).
 
-#  - group = the name of the metadata column to use as grouping factor
+#  - group = the name of the metadata column to use as grouping factor.
 
-#  - min_occurrence = the minimum number of samples the k-mers must be present in to be         kept
+#  - min_occurrence = the minimum number of samples the k-mers must be present in to be kept.
 
 ```
 
@@ -185,7 +185,7 @@ filter_shannon_values(x,  threshold)
 #arguments
 
 # - x = a list of named vectors (e.g., shannon$values).
-# - threshold = minimum shannon value of sequences to be retained
+# - threshold = minimum shannon value of sequences to be retained.
 ```
 
 ##### Returns: a list of named vectors
@@ -215,7 +215,7 @@ filtered_shannon
 
 ### Filter k-mers based on the edit distance
 
-The sequences which were found to be unique might be biased by mutations and sequencing errors (substitution, addition, deletion, or frameshift). The function filter_ed() allows to detect possible biases by calculating the number of edits that have to be done on a string (in this case a sequence) to make it identical to another string, and filter them based on a threshold. The function is based on the package `[stringdist](https://cran.r-project.org/package=stringdist)` and uses its methods.
+The sequences which were found to be unique might be biased by mutations and sequencing errors (substitution, addition, deletion, or frameshift). The function filter_ed() allows to detect possible biases by calculating the number of edits that have to be done on a string (in this case a sequence) to make it identical to another string, and filter them based on a threshold. The function is based on the package stringdist (https://github.com/markvanderloo/stringdist) and uses its methods.
 
 ```r
 
@@ -224,12 +224,118 @@ filter_ed(x, threshold, method, chunk_size, PPARAM)
 #arguments
 
 # - x = a list of named vectors (e.g., shannon$values).
-# - threshold = minimum shannon value of sequences to be retained
-# - method = a list of named vectors (e.g., shannon$values).
-# - chunk_size = minimum shannon value of sequences to be retained
-# - chunk_size = minimum shannon value of sequences to be retained
+# - threshold = minimum number of edits for a sequence to be retained as unique. 
+# - method = one of the methods inherited by stringdist package.
+# - chunk_size = number of lines to be processed together. Useful when dealing with big datasets.
+# - PPARAM = parameter for the parallelization of processes.
 ```
 
+##### Returns: a list of named vectors
+
 ```r
+
 filt_edit_dist <- filter_ed(filt_shann, threshold = 3, method = "lv", chunk_size = 1, BPPARAM = BiocParallel::MulticoreParam())
+
+filt_edit_dist
+
+#>$Malta
+#>[1] "AGTTACGCTG" "ATCCGATTGA" "ATTTACCGGC" "CTGGATCAGC" "GCTTACTCGA" "GTCGTTCAAC" "TCTACTGGAA"
+#>
+#>$Portugal
+#> [1] "ACCTTCAAGG" "AGGTACCCTG" "ATATGGCGCA" "ATGGACACTC" "CAATCGGCTG" "CAGTCGGTAC" "GACTGTAACC" #>"GCTATCAGCA"
+#> [9] "GGAAGTCTCC" "GGACTGCTAC" "TCTGGAACCA"
+#>
+#>$Spain
+#> [1] "ACCAGTTTGA" "ACGCGACTAT" "AGAGCCTTTA" "AGCAGTTACG" "AGCTTATAGC" "ATCCTCTGGA" "CAAGGTTGCA" #>"CAGTGACTTC"
+#> [9] "CCTGCTGTAA" "CGCCGTATTA" "GCCAGGTTAC"
 ```
+
+### Filtering based on the presence of repeated patterns
+
+Sequences that passed the previous filtering steps might present repeated patterns which lower their informativeness in some context.
+
+```r
+
+filter_repeated_seqs(x, mode, pattern, min_repeats, kmer_length) 
+
+
+#arguments
+
+# - x = a list of named vectors (e.g., shannon$values).
+# - mode = one of "pattern" or "any". With "pattern" the user needs to input the pattern to search for. "any" is used to search any             repeated sequence.
+# - pattern = the pattern to search if mode = "pattern".
+# - min_repeats = number of times a sequence or pattern needs to be present to exclude the k-mer.
+# - kmer_length = the length of the sequence to search for if it is repeated if mode = "any".
+```
+
+##### Returns: a list of data.frames
+
+```r
+
+# By using 'mode = "pattern"' we can remove the k-mers which present the <pattern> <min_repeats> times.
+# In this example, we want to remove sequences where "AT" is repeated at least 2 times.
+
+filt_pattern <- <- filter_repeated_seqs(fe, mode = "pattern", pattern = "AT", min_repeats = 2, kmer_length = NULL) 
+
+filt_pattern
+
+#>$Malta
+#>DataFrame with 7 rows and 2 columns
+#>     sequence       group
+#>  <character> <character>
+#>1  AGTTACGCTG       Malta
+#>2  ATCCGATTGA       Malta
+#>3  ATTTACCGGC       Malta
+
+#>$Portugal
+#>DataFrame with 10 rows and 2 columns
+#>      sequence       group
+#>   <character> <character>
+#>1   ACCTTCAAGG    Portugal
+#>2   AGGTACCCTG    Portugal
+#>3   ATGGACACTC    Portugal
+
+#>$Spain
+#>DataFrame with 11 rows and 2 columns
+#>      sequence       group
+#>   <character> <character>
+#>1   ACCAGTTTGA       Spain
+#>2   ACGCGACTAT       Spain
+#>3   AGAGCCTTTA       Spain
+
+
+#In this example we want to remove sequences with any k-mer of length 2 repeated at least 2 times.
+
+filt_any <- filter_repeated_seqs(fe, mode = "any", pattern = NULL, min_repeats = 2, kmer_length = 2)
+
+filt_any
+
+#>$Malta
+#>DataFrame with 3 rows and 2 columns
+#>     sequence       group
+#>  <character> <character>
+#>1  AGTTACGCTG       Malta
+#>2  ATTTACCGGC       Malta
+#>3  CTGGATCAGC       Malta
+#>
+#>$Portugal
+#>DataFrame with 4 rows and 2 columns
+#>     sequence       group
+#>  <character> <character>
+#>1  ACCTTCAAGG    Portugal
+#>2  AGGTACCCTG    Portugal
+#>3  CAATCGGCTG    Portugal
+#>4  TCTGGAACCA    Portugal
+#>
+#>$Spain
+#>DataFrame with 3 rows and 2 columns
+#>     sequence       group
+#>  <character> <character>
+#>1  ACCAGTTTGA       Spain
+#>2  CAGTGACTTC       Spain
+#>3  GCCAGGTTAC       Spain
+```
+
+
+
+
