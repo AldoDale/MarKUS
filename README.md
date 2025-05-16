@@ -159,7 +159,7 @@ shannon$plots
 
 ```
 <p align="center">
-  <img src="MarKUS/man/example_figures/malta.png" width="200" />
-  <img src="MarKUS/man/example_figures/portugal.png" width="200" />
-  <img src="MarKUS/man/example_figures/spain.png" width="200" />
+  <img src="MarKUS/man/example_figures/malta.png" width="400" />
+  <img src="MarKUS/man/example_figures/portugal.png" width="400" />
+  <img src="MarKUS/man/example_figures/spain.png" width="400" />
 </p>
