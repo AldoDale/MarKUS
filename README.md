@@ -57,6 +57,17 @@ kmers <- count_kmers(x, kmer_size = 20, threads = 10)
 #  - threads = the number of threads to use
 
 ```
+#### Returns: a data.frame
+```r
+
+kmers
+
+#>       sample                             counts_db                                    kmer_txt
+#>1     Malta_1    ./path/to/file/Malta_1_counts_R.jf    ./path/to/file/Malta_1_kmer_counts_R.txt
+#>2     Malta_2    ./path/to/file/Malta_2_counts_R.jf    ./path/to/file/Malta_2_kmer_counts_R.txt
+#>3     Malta_3    ./path/to/file/Malta_3_counts_R.jf    ./path/to/file/Malta_3_kmer_counts_R.txt
+
+```
 
 ###Extract group-exclusive k-mers
 
@@ -78,6 +89,16 @@ shared_kmers <- get_shared_kmers(x, data, group = “origin”, min_occurrence =
 #  - min_occurrence = the minimum number of samples the k-mers must be present in to be         kept
 
 ```
+
+#### Returns: a named vector
+```r
+shared_kmers
+                                       Malta                                      Portugal                                      Spain
+#>   "./path/to/file/Malta_shared_kmers_R.txt" "../path/to/file/Portugal_shared_kmers_R.txt" "../path/to/file/Spain_shared_kmers_R.txt" 
+
+
+```
+
 
 ###Calculate information content of k-mers
 
