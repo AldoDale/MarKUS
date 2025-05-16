@@ -25,6 +25,7 @@ merged_files <- merge_fastq(path = ".", pattern = "*.fastq.1.gz")
 
 #  - pattern = pattern to recognize the first (or forward) strand files
 ```
+
 #### Returns: a data.frame
 ```r
 
@@ -49,8 +50,8 @@ kmers <- count_kmers(x, kmer_size = 20, threads = 10)
 #arguments
 
 #  - x = data.frame with a "sample" column with sample names and a "merged_path" column
-         with the path to the fastq files. If merge_fastq() was used, the output of the
-         function can be used as input of count_kmers()
+#        with the path to the fastq files. If merge_fastq() was used, the output of the
+#        function can be used as input of count_kmers()
          
 #  - kmer_size = the desired size of k-mers
 
@@ -80,7 +81,7 @@ shared_kmers <- get_shared_kmers(x, data, group = “origin”, min_occurrence =
 #arguments
 
 #  - x = data.frame with a "sample" column with sample names and a "kmer_txt" column
-         with the path to the k-mers .txt files. The dataframe is created by the function           count_kmers()
+#        with the path to the k-mers .txt files. The dataframe is created by the function           count_kmers()
          
 #  - data = a data.frame with the metadata. It must have a "sample" column (identical to            the x data.frame column).
 
@@ -93,7 +94,9 @@ shared_kmers <- get_shared_kmers(x, data, group = “origin”, min_occurrence =
 #### Returns: a named vector
 ```r
 shared_kmers
-                                       Malta                                      Portugal                                      Spain
+
+
+#>                                       Malta                                      Portugal                                      Spain
 #>   "./path/to/file/Malta_shared_kmers_R.txt" "../path/to/file/Portugal_shared_kmers_R.txt" "../path/to/file/Spain_shared_kmers_R.txt" 
 
 
@@ -112,7 +115,47 @@ shannon <- calculate_shannon(x)
 
 # - x = a named vector. Names must indicate the group, values must be the path to the "<group>_shared_kmers_R.txt" file.
 
-#output
+```
 
+#### Returns: a list of lists
+```r
+shannon$sequences
+
+#>$Malta
+#>  [1] "AAAAGTGGAA" "AAAGTAGTGT" "AAATAACAGC" "AAATTCGCCT" "AACCCATCTA" "AAGAAACAGC" "AAGAATATGA" "AAGACTTTGT" "AAGCCCTATC" "AATACACGAG"
+#> [11] "AATCCAACGG" "AATCTACCGC" "AATGACTAGG" "AATGTGGTAG" "AATTTAGCCC" "ACACCGATCT" "ACACCTGCTG" "ACAGTCGATA" "ACATCCCGAG" "ACATGACGCG"
+#>
+#>$Portugal
+#>  [1] "AAAAACTGCA" "AAAATTTTGG" "AAACGCTAGT" "AAACTTGACT" "AAAGGACTCG" "AAATGCAGTG" "AAATGTACGT" "AAATTACGCT" "AACACAATCG" "AACACTCAAG"
+#> [11] "AACCGACGAC" "AACGGATTGT" "AAGCCGCTGC" "AAGGTAAATC" "AATCGTTTTA" "AATGCTTCTG" "AATGTAAGTA" "ACACTGTAGC" "ACACTGTCGT" "ACATTATTGA"
+#>
+#>$Spain
+#>  [1] "AAAACATAAT" "AAACGCAAGA" "AAATTACATA" "AACCGATCGG" "AACTCTCCAG" "AAGAAATAAA" "AAGCAGACCG" "AAGTCGGACT" "AATCGTAGCT" "AATTAATGCG"
+#> [11] "AATTTGTTCT" "ACACACTGCC" "ACACGCGAAT" "ACCAGAGCAA" "ACCAGTTTGA" "ACCATAGCAG" "ACCGCCACAT" "ACCGGCTCAC" "ACCTGAATAA" "ACGAACCTCG"
+
+
+shannon$values
+
+#>$Malta
+#>AAAAGTGGAA AAAGTAGTGT AAATAACAGC AAATTCGCCT AACCCATCTA AAGAAACAGC AAGAATATGA AAGACTTTGT AAGCCCTATC AATACACGAG AATCCAACGG AATCTACCGC 
+#> 1.2954618  1.5709506  1.5709506  1.8954618  1.5219281  1.3709506  1.3709506  1.8464393  1.8464393  1.7609640  1.8464393  1.8464393  
+#> 
+#>$Portugal
+#>AAAAACTGCA AAAATTTTGG AAACGCTAGT AAACTTGACT AAAGGACTCG AAATGCAGTG AAATGTACGT AAATTACGCT AACACAATCG AACACTCAAG AACCGACGAC AACGGATTGT 
+#>  1.570951   1.521928   1.921928   1.846439   1.846439   1.846439   1.846439   1.846439   1.685475   1.685475   1.521928   1.895462
+#>  
+#>$Spain
+#>AAAACATAAT AAACGCAAGA AAATTACATA AACCGATCGG AACTCTCCAG AAGAAATAAA AAGCAGACCG AAGTCGGACT AATCGTAGCT AATTAATGCG AATTTGTTCT ACACACTGCC
+#> 1.1567796  1.3709506  1.2954618  1.8954618  1.8464393  0.9219281  1.5709506  1.9709506  1.9709506  1.8464393  1.5709506  1.6854753
+ 
+shannon$plots
+
+#>$Malta
+![Repeat‑finder workflow diagram](man/example_figures/malta.png)
+#>$Portugal
+
+#>$Spain
+ 
 
 ```
+![Repeat‑finder workflow diagram](man/example_figures/malta.png)
