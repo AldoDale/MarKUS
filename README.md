@@ -5,7 +5,6 @@ MarKUS provides a fast and efficient workflow for the extraction, count, and fil
 ## Installation
 
 ```r
-# or from GitHub
 remotes::install_github("AldoDale/MarKUS", subdir = "MarKUS")
 ```
 
@@ -16,6 +15,10 @@ remotes::install_github("AldoDale/MarKUS", subdir = "MarKUS")
 ```r
 
 merged_files <- merge_fastq(path = ".", pattern = "*.fastq.1.gz")
+
+###arguments
+  -dsj
+  -dfsfd
 
 ```
 ###arguments
