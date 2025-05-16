@@ -11,6 +11,8 @@ remotes::install_github("AldoDale/MarKUS", subdir = "MarKUS")
 
 ## How to use
 
+An example dataset is available at https://github.com/AldoDale/MarKUS/tree/main/MarKUS/man/example_dataset.
+
 
 ### Merge fastq files
 
