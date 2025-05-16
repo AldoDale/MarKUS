@@ -18,7 +18,7 @@ If the sequencing data is split in first and second strand (or forward and rever
 
 ```r
 
-merged_files <- merge_fastq(path = ".", pattern = "*.fastq.1.gz")
+merge_fastq(path, pattern)
 
 #arguments
 
@@ -30,6 +30,7 @@ merged_files <- merge_fastq(path = ".", pattern = "*.fastq.1.gz")
 #### Returns: a data.frame
 ```r
 
+merged_files <- merge_fastq(path = ".", pattern = "*.fastq.1.gz")
 
 merged_files
 
@@ -46,7 +47,7 @@ merged_files
 To use this function, Jellyfish (https://github.com/gmarcais/Jellyfish) must be installed.
 
 ```r
-count_kmers(x, kmer_size = 20, threads = 10)
+count_kmers(x, kmer_size, threads)
 
 
 #arguments
