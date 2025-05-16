@@ -46,7 +46,7 @@ merged_files
 To use this function, Jellyfish (https://github.com/gmarcais/Jellyfish) must be installed.
 
 ```r
-kmers <- count_kmers(x, kmer_size = 20, threads = 10)
+count_kmers(x, kmer_size = 20, threads = 10)
 
 
 #arguments
@@ -63,6 +63,8 @@ kmers <- count_kmers(x, kmer_size = 20, threads = 10)
 #### Returns: a data.frame
 ```r
 
+kmers <- count_kmers(merged_files, kmer_size = 20, threads = 10)
+
 kmers
 
 #>       sample                             counts_db                                    kmer_txt
@@ -71,13 +73,14 @@ kmers
 #>3     Malta_3    ./path/to/file/Malta_3_counts_R.jf    ./path/to/file/Malta_3_kmer_counts_R.txt
 
 ```
+---
 
 ###Extract group-exclusive k-mers
 
 This function is used to detect k-mers exclusive of one group of samples. A minimum prevalence value can be set.
 
 ```r
-shared_kmers <- get_shared_kmers(x, data, group = “origin”, min_occurrence = 4)
+get_shared_kmers(x, data, group, min_occurrence)
 
 
 #arguments
@@ -95,15 +98,17 @@ shared_kmers <- get_shared_kmers(x, data, group = “origin”, min_occurrence =
 
 #### Returns: a named vector
 ```r
+
+shared_kmers <- get_shared_kmers(kmers, data, group = “origin”, min_occurrence = 4)
 shared_kmers
 
 
 #>                                       Malta                                      Portugal                                      Spain
 #>   "./path/to/file/Malta_shared_kmers_R.txt" "../path/to/file/Portugal_shared_kmers_R.txt" "../path/to/file/Spain_shared_kmers_R.txt" 
 
-
 ```
 
+---
 
 ###Calculate information content of k-mers
 
@@ -121,6 +126,8 @@ shannon <- calculate_shannon(x)
 
 #### Returns: a list of lists
 ```r
+shannon <- calculate_shannon(shared_kmers)
+
 shannon$sequences
 
 #>$Malta
@@ -166,8 +173,40 @@ shannon$plots
   <img src="MarKUS/man/example_figures/spain.png" width="400" />
 </p>
 
+### Filter k-mers based on information content
 
 
 ```r
-filtered_shannon <- filter_shannon_values(x,  threshold = 1.8)
+
+filter_shannon_values(x,  threshold = 1.8)
+
+#arguments
+
+# - x = a list of named vectors (e.g., shannon$values).
+# - threshold = minimum shannon value of sequences to be retained
+```
+
+##### Returns: a list of named vectors
+
+```r
+
+filtered_shannon <- filter_shannon_values(shannon$values,  threshold = 1.8)
+filtered_shannon 
+
+#>$Malta
+#>AGTTACGCTG ATCCGATTGA ATTTACCGGC CAACGTTTGG CACGTGTTGA CTGGATCAGC GCTTACTCGA GGCTTCACTA GTCGTTCAAC GTGCACACTA TCTACTGGAA 
+#>  1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951 
+#>
+#>$Portugal
+#>ACACTGTAGC ACACTGTCGT ACCTTCAAGG AGGTACCCTG ATATGGCGCA ATCTGTGGAC ATGGACACTC ATGTCAGGAC ATTCAGAGTC CAATCGGCTG CAGTCATGCA 
+#>  1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   
+#>CGTACGTGCA GACTGTAACC GCTATCAGCA GGAAGTCTCC GGACTGCTAC TCTATGGACA TCTGGAACCA 
+#>  1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951 
+#>
+#>$Spain
+#>AAGTCGGACT AATCGTAGCT ACCAGTTTGA ACGCGACTAT AGAGCCTTTA AGCAGTTACG AGCTTATAGC ATCCTCTGGA CAAGGTTGCA CAGTGACTTC CCTGCTGTAA 
+#>  1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   
+#>GAGTCATCAC GCCAGGTTAC GGAGTCATCA 
+#>  1.970951   1.970951   1.970951 
+
 ```
