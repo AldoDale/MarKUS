@@ -101,8 +101,9 @@ get_shared_kmers(x, data, group, min_occurrence)
 ```r
 
 shared_kmers <- get_shared_kmers(kmers, data, group = “origin”, min_occurrence = 4)
-shared_kmers
 
+
+shared_kmers
 
 #>                                       Malta                                      Portugal                                      Spain
 #>   "./path/to/file/Malta_shared_kmers_R.txt" "../path/to/file/Portugal_shared_kmers_R.txt" "../path/to/file/Spain_shared_kmers_R.txt" 
@@ -116,7 +117,7 @@ shared_kmers
 This function calculates, based on the frequency of nitrogenous bases, the information content of k-mers. To find the most informative markers, the user might want to filter the k-mers based on this index.
 
 ```r
-shannon <- calculate_shannon(x)
+calculate_shannon(x)
 
 
 #arguments
@@ -179,7 +180,7 @@ shannon$plots
 
 ```r
 
-filter_shannon_values(x,  threshold = 1.8)
+filter_shannon_values(x,  threshold)
 
 #arguments
 
@@ -210,4 +211,25 @@ filtered_shannon
 #>GAGTCATCAC GCCAGGTTAC GGAGTCATCA 
 #>  1.970951   1.970951   1.970951 
 
+```
+
+### Filter k-mers based on the edit distance
+
+The sequences which were found to be unique might be biased by mutations and sequencing errors (substitution, addition, deletion, or frameshift). The function filter_ed() allows to detect possible biases by calculating the number of edits that have to be done on a string (in this case a sequence) to make it identical to another string, and filter them based on a threshold. The function is based on the package `[stringDist](https://cran.r-project.org/package=stringdist)` and uses its methods.
+
+```r
+
+filter_ed(x, threshold, method, chunk_size, PPARAM)
+
+#arguments
+
+# - x = a list of named vectors (e.g., shannon$values).
+# - threshold = minimum shannon value of sequences to be retained
+# - method = a list of named vectors (e.g., shannon$values).
+# - chunk_size = minimum shannon value of sequences to be retained
+# - chunk_size = minimum shannon value of sequences to be retained
+```
+
+```r
+filt_edit_dist <- filter_ed(filt_shann, threshold = 3, method = "lv", chunk_size = 1, BPPARAM = BiocParallel::MulticoreParam())
 ```
