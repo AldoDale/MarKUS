@@ -3,28 +3,28 @@ NULL
 
 #' Function to calculate shannon entropy of sequences
 #'
-#' @param obj named vector obtained from "get_shared_kmers" function
+#' @param x named vector obtained from "get_shared_kmers" function
 #'
 #' @return a list containing a list of named vectors and a list of plots of shannon values distribution
 #' @export
 #'
-#' @examples \dontrun{calculate_entropy(obj)}
-setGeneric("calculate_shannon", function(obj)
+#' @examples \dontrun{calculate_entropy(x)}
+setGeneric("calculate_shannon", function(x)
   standardGeneric("calculate_shannon"))
 
 setMethod("calculate_shannon",
-          signature("dfOrVec"), function(obj) {
-            if (is.character(obj) && !is.null(names(obj))) {
+          signature("dfOrVec"), function(x) {
+            if (is.character(x) && !is.null(names(x))) {
               df <- data.frame(
-                group = names(obj),
-                shared_path = unname(obj),
+                group = names(x),
+                shared_path = unname(x),
                 stringsAsFactors = FALSE
               )
-            } else if (is.data.frame(obj) &&
-                       all(c("group","shared_path") %in% names(obj))) {
-              df <- obj
+            } else if (is.data.frame(x) &&
+                       all(c("group","shared_path") %in% names(x))) {
+              df <- x
             } else {
-              stop("`obj` must be either a named character vector or a data.frame with columns 'group' & 'shared_path'")
+              stop("`x` must be either a named character vector or a data.frame with columns 'group' & 'shared_path'")
             }
 
             calc_ent <- function(seq) {

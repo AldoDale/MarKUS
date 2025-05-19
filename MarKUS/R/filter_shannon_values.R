@@ -11,12 +11,28 @@ setGeneric("filter_shannon_values", function(x, threshold)
 
 setMethod("filter_shannon_values",
           signature("vector"), function(x, threshold) {
-  if (is.null(names(x))) {
-    stop("`shannon_values` must be a named list")
-  }
-  lapply(x, function(vals) {
-    vals[vals > threshold]
-  })
+            filter_one <- function(v) {
+              if (!is.numeric(v) || !is.atomic(v)) {
+                stop("Each component must be a numeric vector")
+              }
+              if (is.null(names(v))) {
+                stop("Each numeric vector must have names (the sequences)")
+              }
+              v[v > threshold]
+            }
+
+            # Dispatch on input type
+            if (is.numeric(x) && is.atomic(x)) {
+              # single vector
+              return(list(filtered = filter_one(x)))
+            }
+            if (is.list(x) && !is.null(names(x))) {
+              # list of vectors
+              out <- lapply(x, filter_one)
+              return(out)
+            }
+
+            stop("`x` must be either a named numeric vector or a named list of them")
           }
 )
 

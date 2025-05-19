@@ -34,7 +34,7 @@ setMethod("merge_fastq",
                       basename(f1),
                       ' + ',
                       basename(f2),
-                      ' → ',
+                      ' to ',
                       basename(out))
               status <- system(cmd)
               if (status != 0)

@@ -4,10 +4,10 @@
 \alias{calculate_shannon}
 \title{Function to calculate shannon entropy of sequences}
 \usage{
-calculate_shannon(obj)
+calculate_shannon(x)
 }
 \arguments{
-\item{obj}{named vector obtained from "get_shared_kmers" function}
+\item{x}{named vector obtained from "get_shared_kmers" function}
 }
 \value{
 a list containing a list of named vectors and a list of plots of shannon values distribution
@@ -16,5 +16,5 @@ a list containing a list of named vectors and a list of plots of shannon values 
 Function to calculate shannon entropy of sequences
 }
 \examples{
-\dontrun{calculate_entropy(obj)}
+\dontrun{calculate_entropy(x)}
 }

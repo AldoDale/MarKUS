@@ -7,7 +7,7 @@
 filter_repeated_seqs(
   x,
   mode = c("pattern", "any"),
-  pattern = "AC",
+  pattern = NULL,
   min_repeats = 2,
   kmer_length = 3
 )
