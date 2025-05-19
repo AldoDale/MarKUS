@@ -21,7 +21,7 @@ If the sequencing data is split in strand 1 and 2 (or forward and reverse strand
 
 ```r
 
-merge_pairs(path/to/files, pattern_s1, pattern_s2, output_ext)
+merge_pairs(path, pattern_s1, pattern_s2, output_ext)
 
 #arguments
 
