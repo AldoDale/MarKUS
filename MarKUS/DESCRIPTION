@@ -9,3 +9,12 @@ License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
+Collate: 
+    'classes.R'
+    'calculate_shannon.R'
+    'count_kmers.R'
+    'filter_ed.R'
+    'filter_repeated_seqs.R'
+    'filter_shannon_values.R'
+    'get_shared_kmers.R'
+    'merge_fasta.R'
