@@ -15,32 +15,48 @@ remotes::install_github("AldoDale/MarKUS", subdir = "MarKUS")
 An example dataset is available at https://github.com/AldoDale/MarKUS/tree/main/MarKUS/man/example_dataset.
 
 
-### Merge fastq files
+### Merge paired files
 
-If the sequencing data is split in first and second strand (or forward and reverse strand), the files should be first merged
+If the sequencing data is split in strand 1 and 2 (or forward and reverse strand), the files should be first merged
 
 ```r
 
-merge_fastq(path, pattern)
+merge_pairs(path/to/files, pattern_s1, pattern_s2, output_ext)
 
 #arguments
 
 #  - path = path to the directory containing the files.
 
-#  - pattern = pattern to recognize the first (or forward) strand files.
+#  - pattern_s1 = pattern to recognize the first (or forward) strand files.
+
+#  - pattern_s2 = pattern to recognize the second (or reverse) strand files.
+
+#  -output_ext = the desired output extension (the same extension of input files is recommended).
 ```
 
 #### Returns: a data.frame
 ```r
 
-merged_files <- merge_fastq(path = ".", pattern = "*.fastq.1.gz")
+merged_files <- merge_pairs(path = "./example_dataset", pattern_s1 = "*_R1.fastq", "*_R2.fastq", output_ext = "fastq")
 
 merged_files
 
-#>       sample                     merged_path
-#>1     Malta_1    ./path/to/file/Malta_1.fastq
-#>2     Malta_2    ./path/to/file/Malta_2.fastq
-#>3     Malta_3    ./path/to/file/Malta_3.fastq
+#>       sample                              merged_path
+#>1     Malta_1    ./example_dataset/Malta_1_merged.fastq
+#>2     Malta_2    ./example_dataset/Malta_2_merged.fastq
+#>3     Malta_3    ./example_dataset/Malta_3_merged.fastq
+#>4     Malta_4    ./example_dataset/Malta_4_merged.fastq
+#>5     Malta_5    ./example_dataset/Malta_5_merged.fastq
+#>6  Portugal_1 ./example_dataset/Portugal_1_merged.fastq
+#>7  Portugal_2 ./example_dataset/Portugal_2_merged.fastq
+#>8  Portugal_3 ./example_dataset/Portugal_3_merged.fastq
+#>9  Portugal_4 ./example_dataset/Portugal_4_merged.fastq
+#>10 Portugal_5 ./example_dataset/Portugal_5_merged.fastq
+#>11    Spain_1    ./example_dataset/Spain_1_merged.fastq
+#>12    Spain_2    ./example_dataset/Spain_2_merged.fastq
+#>13    Spain_3    ./example_dataset/Spain_3_merged.fastq
+#>14    Spain_4    ./example_dataset/Spain_4_merged.fastq
+#>15    Spain_5    ./example_dataset/Spain_5_merged.fastq
 
 ```
 ---
@@ -67,14 +83,25 @@ count_kmers(x, kmer_size, threads)
 #### Returns: a data.frame
 ```r
 
-kmers <- count_kmers(merged_files, kmer_size = 20, threads = 10)
 
-kmers
+kmers <- count_kmers(merged_files, kmer_size = 10, threads = 10)
 
-#>       sample                             counts_db                                    kmer_txt
-#>1     Malta_1    ./path/to/file/Malta_1_counts_R.jf    ./path/to/file/Malta_1_kmer_counts_R.txt
-#>2     Malta_2    ./path/to/file/Malta_2_counts_R.jf    ./path/to/file/Malta_2_kmer_counts_R.txt
-#>3     Malta_3    ./path/to/file/Malta_3_counts_R.jf    ./path/to/file/Malta_3_kmer_counts_R.txt
+#>      sample                                 counts_db                                       kmer_txt
+#>1     Malta_1    ./example_dataset/Malta_1_counts_R.jf    ./example_dataset/Malta_1_kmer_counts_R.txt
+#>2     Malta_2    ./example_dataset/Malta_2_counts_R.jf    ./example_dataset/Malta_2_kmer_counts_R.txt
+#>3     Malta_3    ./example_dataset/Malta_3_counts_R.jf    ./example_dataset/Malta_3_kmer_counts_R.txt
+#>4     Malta_4    ./example_dataset/Malta_4_counts_R.jf    ./example_dataset/Malta_4_kmer_counts_R.txt
+#>5     Malta_5    ./example_dataset/Malta_5_counts_R.jf    ./example_dataset/Malta_5_kmer_counts_R.txt
+#>6  Portugal_1 ./example_dataset/Portugal_1_counts_R.jf ./example_dataset/Portugal_1_kmer_counts_R.txt
+#>7  Portugal_2 ./example_dataset/Portugal_2_counts_R.jf ./example_dataset/Portugal_2_kmer_counts_R.txt
+#>8  Portugal_3 ./example_dataset/Portugal_3_counts_R.jf ./example_dataset/Portugal_3_kmer_counts_R.txt
+#>9  Portugal_4 ./example_dataset/Portugal_4_counts_R.jf ./example_dataset/Portugal_4_kmer_counts_R.txt
+#>10 Portugal_5 ./example_dataset/Portugal_5_counts_R.jf ./example_dataset/Portugal_5_kmer_counts_R.txt
+#>11    Spain_1    ./example_dataset/Spain_1_counts_R.jf    ./example_dataset/Spain_1_kmer_counts_R.txt
+#>12    Spain_2    ./example_dataset/Spain_2_counts_R.jf    ./example_dataset/Spain_2_kmer_counts_R.txt
+#>13    Spain_3    ./example_dataset/Spain_3_counts_R.jf    ./example_dataset/Spain_3_kmer_counts_R.txt
+#>14    Spain_4    ./example_dataset/Spain_4_counts_R.jf    ./example_dataset/Spain_4_kmer_counts_R.txt
+#>15    Spain_5    ./example_dataset/Spain_5_counts_R.jf    ./example_dataset/Spain_5_kmer_counts_R.txt
 
 ```
 ---
@@ -102,14 +129,18 @@ get_shared_kmers(x, data, group, min_occurrence)
 
 #### Returns: a named vector
 ```r
+#to run the example, a sample metadata object can be created with:
+
+metadata <- data.frame(sample = kmers$sample, group = gsub("_[1-9]", "", kmers$sample))
+
 
 shared_kmers <- get_shared_kmers(kmers, data, group = “origin”, min_occurrence = 4)
 
 
 shared_kmers
 
-#>                                       Malta                                      Portugal                                      Spain
-#>   "./path/to/file/Malta_shared_kmers_R.txt" "../path/to/file/Portugal_shared_kmers_R.txt" "../path/to/file/Spain_shared_kmers_R.txt" 
+#>                                          Malta                                        Portugal                                        Spain 
+#>   "./example_dataset/Malta_shared_kmers_R.txt" "./example_dataset/Portugal_shared_kmers_R.txt" "./example_dataset/Spain_shared_kmers_R.txt"
 
 ```
 
@@ -129,23 +160,23 @@ calculate_shannon(x)
 
 ```
 
-#### Returns: a list of lists of named vectors and plots.
+#### Returns: a list of named vectors and plots.
 ```r
 shannon <- calculate_shannon(shared_kmers)
 
-shannon$values
+lapply(shannon$shannon_values, head)
 
 #>$Malta
-#>AAAAGTGGAA AAAGTAGTGT AAATAACAGC AAATTCGCCT AACCCATCTA AAGAAACAGC AAGAATATGA AAGACTTTGT AAGCCCTATC AATACACGAG AATCCAACGG AATCTACCGC 
-#> 1.2954618  1.5709506  1.5709506  1.8954618  1.5219281  1.3709506  1.3709506  1.8464393  1.8464393  1.7609640  1.8464393  1.8464393  
-#> 
+#>AAAAGTGGAA AAAGTAGTGT AAATAACAGC AAATTCGCCT AACCCATCTA AAGAAACAGC 
+#>  1.295462   1.570951   1.570951   1.895462   1.521928   1.370951 
+#>
 #>$Portugal
-#>AAAAACTGCA AAAATTTTGG AAACGCTAGT AAACTTGACT AAAGGACTCG AAATGCAGTG AAATGTACGT AAATTACGCT AACACAATCG AACACTCAAG AACCGACGAC AACGGATTGT 
-#>  1.570951   1.521928   1.921928   1.846439   1.846439   1.846439   1.846439   1.846439   1.685475   1.685475   1.521928   1.895462
-#>  
+#>AAAAACTGCA AAAATTTTGG AAACGCTAGT AAACTTGACT AAAGGACTCG AAATGCAGTG 
+#>  1.570951   1.521928   1.921928   1.846439   1.846439   1.846439 
+#>
 #>$Spain
-#>AAAACATAAT AAACGCAAGA AAATTACATA AACCGATCGG AACTCTCCAG AAGAAATAAA AAGCAGACCG AAGTCGGACT AATCGTAGCT AATTAATGCG AATTTGTTCT ACACACTGCC
-#> 1.1567796  1.3709506  1.2954618  1.8954618  1.8464393  0.9219281  1.5709506  1.9709506  1.9709506  1.8464393  1.5709506  1.6854753
+#>AAAACATAAT AAACGCAAGA AAATTACATA AACCGATCGG AACTCTCCAG AAGAAATAAA 
+#> 1.1567796  1.3709506  1.2954618  1.8954618  1.8464393  0.9219281 
  
 shannon$plots
 
@@ -162,6 +193,8 @@ shannon$plots
   <img src="MarKUS/man/example_figures/portugal.png" width="400" />
   <img src="MarKUS/man/example_figures/spain.png" width="400" />
 </p>
+
+---
 
 ### Filter k-mers based on information content
 
@@ -181,25 +214,23 @@ filter_shannon_values(x,  threshold)
 ```r
 
 filtered_shannon <- filter_shannon_values(shannon$values,  threshold = 1.8)
-filtered_shannon 
+
+lapply(filt_shann, head)
 
 #>$Malta
-#>AGTTACGCTG ATCCGATTGA ATTTACCGGC CAACGTTTGG CACGTGTTGA CTGGATCAGC GCTTACTCGA GGCTTCACTA GTCGTTCAAC GTGCACACTA TCTACTGGAA 
-#>  1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951 
+#>AAATTCGCCT AAGACTTTGT AAGCCCTATC AATCCAACGG AATCTACCGC AATGACTAGG 
+#>  1.895462   1.846439   1.846439   1.846439   1.846439   1.846439 
 #>
 #>$Portugal
-#>ACACTGTAGC ACACTGTCGT ACCTTCAAGG AGGTACCCTG ATATGGCGCA ATCTGTGGAC ATGGACACTC ATGTCAGGAC ATTCAGAGTC CAATCGGCTG CAGTCATGCA 
-#>  1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   
-#>CGTACGTGCA GACTGTAACC GCTATCAGCA GGAAGTCTCC GGACTGCTAC TCTATGGACA TCTGGAACCA 
-#>  1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951 
+#>AAACGCTAGT AAACTTGACT AAAGGACTCG AAATGCAGTG AAATGTACGT AAATTACGCT 
+#>  1.921928   1.846439   1.846439   1.846439   1.846439   1.846439 
 #>
 #>$Spain
-#>AAGTCGGACT AATCGTAGCT ACCAGTTTGA ACGCGACTAT AGAGCCTTTA AGCAGTTACG AGCTTATAGC ATCCTCTGGA CAAGGTTGCA CAGTGACTTC CCTGCTGTAA 
-#>  1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   1.970951   
-#>GAGTCATCAC GCCAGGTTAC GGAGTCATCA 
-#>  1.970951   1.970951   1.970951 
+#>AACCGATCGG AACTCTCCAG AAGTCGGACT AATCGTAGCT AATTAATGCG ACACGCGAAT 
+#>  1.895462   1.846439   1.970951   1.970951   1.846439   1.846439 
 
 ```
+---
 
 ### Filter k-mers based on the edit distance
 
@@ -226,17 +257,21 @@ filt_edit_dist <- filter_ed(filt_shann, threshold = 3, method = "lv", chunk_size
 
 filt_edit_dist
 
-#>$Malta
-#>[1] "AGTTACGCTG" "ATCCGATTGA" "ATTTACCGGC" "CTGGATCAGC" "GCTTACTCGA" "GTCGTTCAAC" "TCTACTGGAA"
-#>
-#>$Portugal
-#> [1] "ACCTTCAAGG" "AGGTACCCTG" "ATATGGCGCA" "ATGGACACTC" "CAATCGGCTG" "CAGTCGGTAC" "GACTGTAACC" #>"GCTATCAGCA"
-#> [9] "GGAAGTCTCC" "GGACTGCTAC" "TCTGGAACCA"
-#>
-#>$Spain
-#> [1] "ACCAGTTTGA" "ACGCGACTAT" "AGAGCCTTTA" "AGCAGTTACG" "AGCTTATAGC" "ATCCTCTGGA" "CAAGGTTGCA" #>"CAGTGACTTC"
-#> [9] "CCTGCTGTAA" "CGCCGTATTA" "GCCAGGTTAC"
+#$Malta
+# [1] "AAGACTTTGT" "AAGCCCTATC" "AATGACTAGG" "ACACCGATCT" "ACACCTGCTG" "ACAGTCGATA" "ACGAGTGGAC" "ACGGGCTCCT" "ACTCGACTAA" "ACTCGTTTGC" "ACTCTAATCG" "AGAATTTGCA" "AGGGAGACTC" "AGGTCGTTCG"
+#[15] "AGGTGCGCAC" "AGTTACGCTG" "ATCCGATTGA" "ATGTCTGCTA" "ATTTGCGTAA" "CATGAGCAAG" "CGGTATCGGA" "CTATTGGGTC" "GACATAGTGA" "GCTGGGTTCA" "GGTACAGACC" "GTCGTTCAAC" "TAGCTTGTGA" "TCTACTGGAA"
+#
+#$Portugal
+# [1] "AAACTTGACT" "AAAGGACTCG" "AACGGATTGT" "AATGCTTCTG" "ACCTTCAAGG" "ACGCGTCCGA" "ACTCACCTGA" "AGACGTAATG" "AGCGGATCAC" "AGCTTAGACA" "AGGTACCCTG" "ATAGTGCCCC" "ATTGCGTAGG" "CAATCGGCTG"
+#[15] "CATGAATATC" "CCGGAGTAAG" "CCGGTTTTAA" "CGACAAGTCC" "CTGATACAAC" "CTTTGGATAA" "GCTATCAGCA" "GGAAGTCTCC" "GGACTGCTAC" "GGCGACAGTA" "GGTTACCCCA" "GTCAATTCAC" "GTTGCTTAAA" "TAAAGCTGCA"
+#[29] "TCGTCCTAAA" "TCTGGAACCA"
+#
+#$Spain
+# [1] "AACCGATCGG" "AACTCTCCAG" "ACACGCGAAT" "ACCAGTTTGA" "ACCATAGCAG" "ACGCGACTAT" "ACGTTAGGGC" "AGAGCCTTTA" "ATAAGCTAGG" "ATTATGCAAC" "CAGTGACTTC" "CATAGGCTAA" "CCACTCGGGA" "CCTGCTGTAA"
+#[15] "CGATTAGAAG" "CGCAAATGCA" "CGCCGTATTA" "CGGCTGAAGA" "CGTACTCCAA" "CTTGAATCCC" "GACCTCAATC" "GCCAGGTTAC" "GCTGTTCGAC" "GGTGCCAGAC" "GTCGCGTTGA" "TACAGTAGCA" "TACCGGCTCA" "TCGTCACACA"
+
 ```
+---
 
 ### Filtering based on the presence of repeated patterns
 
@@ -268,28 +303,52 @@ filt_pattern <- <- filter_repeated_seqs(fe, mode = "pattern", pattern = "AT", mi
 filt_pattern
 
 #>$Malta
-#>DataFrame with 7 rows and 2 columns
-#>     sequence       group
-#>  <character> <character>
-#>1  AGTTACGCTG       Malta
-#>2  ATCCGATTGA       Malta
-#>3  ATTTACCGGC       Malta
-
+#>DataFrame with 28 rows and 2 columns
+#>       sequence       group
+#>    <character> <character>
+#>1    AAGACTTTGT       Malta
+#>2    AAGCCCTATC       Malta
+#>3    AATGACTAGG       Malta
+#>4    ACACCGATCT       Malta
+#>5    ACACCTGCTG       Malta
+#>...         ...         ...
+#>24   GCTGGGTTCA       Malta
+#>25   GGTACAGACC       Malta
+#>26   GTCGTTCAAC       Malta
+#>27   TAGCTTGTGA       Malta
+#>28   TCTACTGGAA       Malta
+#>
 #>$Portugal
-#>DataFrame with 10 rows and 2 columns
-#>      sequence       group
-#>   <character> <character>
-#>1   ACCTTCAAGG    Portugal
-#>2   AGGTACCCTG    Portugal
-#>3   ATGGACACTC    Portugal
-
+#>DataFrame with 29 rows and 2 columns
+#>       sequence       group
+#>    <character> <character>
+#>1    AAACTTGACT    Portugal
+#>2    AAAGGACTCG    Portugal
+#>3    AACGGATTGT    Portugal
+#>4    AATGCTTCTG    Portugal
+#>5    ACCTTCAAGG    Portugal
+#>...         ...         ...
+#>25   GTCAATTCAC    Portugal
+#>26   GTTGCTTAAA    Portugal
+#>27   TAAAGCTGCA    Portugal
+#>28   TCGTCCTAAA    Portugal
+#>29   TCTGGAACCA    Portugal
+#>
 #>$Spain
-#>DataFrame with 11 rows and 2 columns
-#>      sequence       group
-#>   <character> <character>
-#>1   ACCAGTTTGA       Spain
-#>2   ACGCGACTAT       Spain
-#>3   AGAGCCTTTA       Spain
+#>DataFrame with 28 rows and 2 columns
+#>       sequence       group
+#>    <character> <character>
+#>1    AACCGATCGG       Spain
+#>2    AACTCTCCAG       Spain
+#>3    ACACGCGAAT       Spain
+#>4    ACCAGTTTGA       Spain
+#>5    ACCATAGCAG       Spain
+#>...         ...         ...
+#>24   GGTGCCAGAC       Spain
+#>25   GTCGCGTTGA       Spain
+#>26   TACAGTAGCA       Spain
+#>27   TACCGGCTCA       Spain
+#>28   TCGTCACACA       Spain
 
 
 #In this example we want to remove sequences with any k-mer of length 2 repeated at least 2 times.
@@ -299,31 +358,57 @@ filt_any <- filter_repeated_seqs(fe, mode = "any", pattern = NULL, min_repeats =
 filt_any
 
 #>$Malta
-#>DataFrame with 3 rows and 2 columns
-#>     sequence       group
-#>  <character> <character>
-#>1  AGTTACGCTG       Malta
-#>2  ATTTACCGGC       Malta
-#>3  CTGGATCAGC       Malta
+#>DataFrame with 10 rows and 2 columns
+#>      sequence       group
+#>   <character> <character>
+#>1   AAGACTTTGT       Malta
+#>2   AAGCCCTATC       Malta
+#>3   AATGACTAGG       Malta
+#>4   ACAGTCGATA       Malta
+#>5   ACTCGTTTGC       Malta
+#>6   AGAATTTGCA       Malta
+#>7   AGTTACGCTG       Malta
+#>8   ATTTGCGTAA       Malta
+#>9   CTATTGGGTC       Malta
+#>10  GCTGGGTTCA       Malta
 #>
 #>$Portugal
-#>DataFrame with 4 rows and 2 columns
-#>     sequence       group
-#>  <character> <character>
-#>1  ACCTTCAAGG    Portugal
-#>2  AGGTACCCTG    Portugal
-#>3  CAATCGGCTG    Portugal
-#>4  TCTGGAACCA    Portugal
+#>DataFrame with 12 rows and 2 columns
+#>       sequence       group
+#>    <character> <character>
+#>1    AAAGGACTCG    Portugal
+#>2    AACGGATTGT    Portugal
+#>3    ACCTTCAAGG    Portugal
+#>4    AGACGTAATG    Portugal
+#>5    AGCGGATCAC    Portugal
+#>...         ...         ...
+#>8    CAATCGGCTG    Portugal
+#>9    CGACAAGTCC    Portugal
+#>10   CTTTGGATAA    Portugal
+#>11   GGCGACAGTA    Portugal
+#>12   TCTGGAACCA    Portugal
 #>
 #>$Spain
-#>DataFrame with 3 rows and 2 columns
-#>     sequence       group
-#>  <character> <character>
-#>1  ACCAGTTTGA       Spain
-#>2  CAGTGACTTC       Spain
-#>3  GCCAGGTTAC       Spain
+#>DataFrame with 10 rows and 2 columns
+#>      sequence       group
+#>   <character> <character>
+#>1   ACCAGTTTGA       Spain
+#>2   ACGTTAGGGC       Spain
+#>3   CAGTGACTTC       Spain
+#>4   CCACTCGGGA       Spain
+#>5   CGTACTCCAA       Spain
+#>6   CTTGAATCCC       Spain
+#>7   GCCAGGTTAC       Spain
+#>8   GCTGTTCGAC       Spain
+#>9   GGTGCCAGAC       Spain
+#>10  TACCGGCTCA       Spain
+
 ```
 
+---
 
+## Contacts
+
+For questions, bug reports, and any kind of request, please feel free to contact me at: aldo.dalessandro@unifi.it
 
 

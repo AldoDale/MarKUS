@@ -23,6 +23,9 @@ filter_repeated_seqs(
 
 \item{kmer_length}{used to choose the repeated sequence length if mode = "any"}
 }
+\value{
+a named vector
+}
 \description{
 Function to filter sequences based on the presence of repeated patterns
 }

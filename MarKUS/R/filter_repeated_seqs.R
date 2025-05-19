@@ -5,6 +5,10 @@
 #' @param pattern the pattern to search for if mod = "pattern"
 #' @param min_repeats the minimum number of repeats to search for
 #' @param kmer_length used to choose the repeated sequence length if mode = "any"
+#'
+#' @return a named vector
+#'
+#' @export
 
 setGeneric("filter_repeated_seqs", function(x,
                                             mode = c("pattern", "any"),

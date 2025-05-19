@@ -17,4 +17,8 @@ Collate:
     'filter_repeated_seqs.R'
     'filter_shannon_values.R'
     'get_shared_kmers.R'
-    'merge_fasta.R'
+    'merge_pairs.R'
+Imports:
+    BiocParallel,
+    Biostrings,
+    stringdist
