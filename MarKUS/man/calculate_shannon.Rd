@@ -10,7 +10,7 @@ calculate_shannon(obj)
 \item{obj}{named vector obtained from "get_shared_kmers" function}
 }
 \value{
-a list containing a data.frame and a list of plots of shannon values distribution
+a list containing a list of named vectors and a list of plots of shannon values distribution
 }
 \description{
 Function to calculate shannon entropy of sequences
