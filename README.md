@@ -213,7 +213,7 @@ filter_shannon_values(x,  threshold)
 
 ```r
 
-filtered_shannon <- filter_shannon_values(shannon$values,  threshold = 1.8)
+filtered_shannon <- filter_shannon_values(shannon$shannon_values,  threshold = 1.8)
 
 lapply(filt_shann, head)
 
@@ -253,7 +253,7 @@ filter_ed(x, threshold, method, chunk_size, PPARAM)
 
 ```r
 
-filt_edit_dist <- filter_ed(filt_shann, threshold = 3, method = "lv", chunk_size = 1, BPPARAM = BiocParallel::MulticoreParam())
+filt_edit_dist <- filter_ed(filtered_shannon, threshold = 3, method = "lv", chunk_size = 1, BPPARAM = BiocParallel::MulticoreParam())
 
 filt_edit_dist
 
@@ -298,7 +298,7 @@ filter_repeated_seqs(x, mode, pattern, min_repeats, kmer_length)
 # By using 'mode = "pattern"' we can remove the k-mers which present the <pattern> <min_repeats> times.
 # In this example, we want to remove sequences where "AT" is repeated at least 2 times.
 
-filt_pattern <- <- filter_repeated_seqs(fe, mode = "pattern", pattern = "AT", min_repeats = 2, kmer_length = NULL) 
+filt_pattern <- filter_repeated_seqs(fe, mode = "pattern", pattern = "AT", min_repeats = 2, kmer_length = NULL) 
 
 filt_pattern
 
