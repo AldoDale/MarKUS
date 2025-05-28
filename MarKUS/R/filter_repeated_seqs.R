@@ -9,7 +9,6 @@
 #' @return a list of vectors
 #'
 #' @export
-
 setGeneric("filter_repeated_seqs", function(x,
                                              mode = c("pattern", "any"),
                                              pattern = NULL,
